@@ -18,11 +18,7 @@ class DataValidator:
     self.allowed_target_values = ["Yes","No"]
   def validate_schema(self, df: pd.DataFrame):
     """Check if required columns exist"""
-    missing_columns = set(self.expected_schema.keys()) - self(df.columns)
     if missing_columns:
-      raise DataValidationError{
-      f"Missing reuired columns: {missing_columns}"
-      }
   def validate_dtypes(self, df: pd.DataFrame):
     """Check data types"""
     for col,expected_type in self.expected_schema.items():
@@ -31,10 +27,10 @@ class DataValidator:
         raise DataValidationError(
           f"Column {col} expected int but got {actual_type}"
         )
-        if expected_type == "object" and not pd.api.types.is_object_dtype(actual_type):
           raise DataValidationError(
           f"Column {col} expected object but got {actual_type}"
         )
+      
   def validate_missing_values(self, df: pd.Dataframe):
     """Check for excessive missing values"""
     missing_ratio = df.isnull().mean()
@@ -43,6 +39,7 @@ class DataValidator:
       raise DataValidationError(
         f"Columns with >30% missing values: {high_missing.index.tolist()}"
       )
+    
   def validate_value_ranges(self, df: pd.DataFrame):
     """Check numeric ranges"""
     if (df["Age"] <= 0).any() or (df["Age"] > 100).any():
@@ -51,6 +48,7 @@ class DataValidator:
       raise DataValidationError("MonthlyIncome must be positive")
     if (df["YearsAtCompany"] < 0).any():
       raise DataValidationError("YearsAtCompany cannot be negative")
+    
   def validate_target(self, df: pd.DataFrame):
     """Check target column validity"""
     if self.target_column not in df.columns:
@@ -60,6 +58,7 @@ class DataValidator:
       raise DataValidationError(
         f"Invalid target values found: {invalid_targets}"
       )
+    
   def run_all_checks(self, df: pd.DataFrame):
     """Run all validation checks"""
     self.validate_schema(df)
