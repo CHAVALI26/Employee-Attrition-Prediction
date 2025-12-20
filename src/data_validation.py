@@ -1,5 +1,6 @@
 import pandas as pd
 
+class DataValidationError(Exception):
   pass
 
 class DataValidator:
@@ -18,7 +19,9 @@ class DataValidator:
 
   def validate_schema(self, df: pd.DataFrame):
     """Check if required columns exist"""
+    missing_columns = set(self.expected_schema.keys()) - set(df.columns)
     if missing_columns:
+      raise DataValidationError(
       f"Missing required columns: {missing_columns}"
       )
     
@@ -30,6 +33,7 @@ class DataValidator:
         raise DataValidationError(
           f"Column {col} expected int but got {actual_type}"
         )
+      if expected_type == "object" and not pd.api.types.is_object_dtype(actual_type):
           raise DataValidationError(
           f"Column {col} expected object but got {actual_type}"
         )

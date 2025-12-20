@@ -21,6 +21,7 @@ def main():
   preprocessor = DataPreprocessor()
   processed_df = preprocessor.preprocess(df)
   processed_df.to_csv("data/processed/hr_attrition_processed.csv", index=False)
+  print("Data preprocessing completed") 
   """
 
   """Feature Engineering"""

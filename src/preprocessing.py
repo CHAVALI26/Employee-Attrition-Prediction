@@ -16,6 +16,7 @@ class DataPreprocessor:
     numeric_pipeline = Pipeline(steps=[("imputer", SimpleImputer(strategy="median")),
                                        ("scaler", StandardScaler())
                                       ])
+    categorical_pipeline = Pipeline(steps=[("imputer", SimpleImputer(strategy="most_frequent")),
                                            ("scaler", OneHotEncoder(handle_unknown="ignore"))
                                           ])
     self.preprocessor = ColumnTransformer(
@@ -23,6 +24,7 @@ class DataPreprocessor:
     ("cat", categorical_pipeline, self.categorical_features)]
     )
 
+  def preprocess(self, df: pd.Dataframe):
       """Clean and transform data"""
       if self.preprocessor is None:
         self.build_pipeline()
