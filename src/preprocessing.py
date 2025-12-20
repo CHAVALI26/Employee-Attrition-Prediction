@@ -27,12 +27,15 @@ class DataPreprocessor:
       if self.preprocessor is None:
         self.build_pipeline()
       # Separate feature and target
+      X = df.drop(colmns=[self.target_column])
+      y = df[self.target_column].map({"Yes": 1, "No": 0})
 
       # fit & transform features
       X_transformed = self.preprocessor.fit_transform(X)
 
       # Get Features
       feature_names = ( self.numeric_features +
+      list(self.preprocessor.named_transformers_["cat"]
           .named_steps["encoder"]
           .get_feature_names_out(self.categorical_features)
           )

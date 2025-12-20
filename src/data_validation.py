@@ -1,6 +1,5 @@
 import pandas as pd
 
-class DataValidationError(Exception)):
   pass
 
 class DataValidator:
@@ -16,9 +15,13 @@ class DataValidator:
     }
     self.target_column = "Attrition"
     self.allowed_target_values = ["Yes","No"]
+
   def validate_schema(self, df: pd.DataFrame):
     """Check if required columns exist"""
     if missing_columns:
+      f"Missing required columns: {missing_columns}"
+      )
+    
   def validate_dtypes(self, df: pd.DataFrame):
     """Check data types"""
     for col,expected_type in self.expected_schema.items():
